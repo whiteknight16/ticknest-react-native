@@ -1,5 +1,5 @@
 import { View, StyleSheet, Text, Vibration } from "react-native";
-import { Countdown } from "../components/CountDown.jsx"; // Use the correct import for Countdown
+import { Countdown } from "../components/CountDown.jsx";
 import { RoundedButton } from "../components/RoundedButton.jsx";
 import { useState } from "react";
 import { spacing } from "../utils/size";
@@ -7,24 +7,8 @@ import { colors } from "../utils/colors";
 import { ProgressBar } from "react-native-paper";
 import { useKeepAwake } from "expo-keep-awake";
 import Timing from "./Timing.jsx";
-import { Audio } from "expo-av";
 export default function Timer({ focusItem, onTimerEnd, clearSubject }) {
   useKeepAwake();
-
-  const sound = new Audio.Sound();
-
-  const playSound = async () => {
-    try {
-      // Load the sound file
-      await sound.loadAsync(require("../audio/complete.mp3")); // Hard-coded sound file
-      await sound.playAsync(); // Play the sound
-      setTimeout(() => {
-        sound.stopAsync(); // Stop the sound after 3 seconds
-      }, 3000);
-    } catch (error) {
-      console.log("Error playing sound:", error);
-    }
-  };
 
   const [isStarted, setIsStared] = useState(false);
   const [progress, setProgress] = useState(1);
@@ -43,13 +27,12 @@ export default function Timer({ focusItem, onTimerEnd, clearSubject }) {
 
   const onEnd = (reset) => {
     Vibration.vibrate(PATTERN);
-
     setIsStared(false);
     setProgress(1);
-    onTimerEnd(focusItem);
-    playSound();
     reset();
+    onTimerEnd(focusItem);
   };
+
   return (
     <View style={styles.container}>
       <View style={styles.countdown}>

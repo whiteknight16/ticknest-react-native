@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from "react";
+import { Text, View, StyleSheet } from "react-native";
 
-import { fontSize, spacing } from '../utils/size';
-import { colors } from '../utils/colors';
+import { fontSize, spacing } from "../utils/size";
+import { colors } from "../utils/colors";
+import { Audio } from "expo-av";
 
 const minutesToMillis = (min) => min * 1000 * 60;
 const formatTime = (time) => (time < 10 ? `0${time}` : time);
@@ -11,9 +12,10 @@ export const Countdown = ({ minutes = 0.1, isPaused, onProgress, onEnd }) => {
 
   const [millis, setMillis] = useState(null);
 
-  const reset=()=>{
-    setMillis(minutesToMillis(minutes))
-  }
+  const reset = () => {
+    playSound();
+    setMillis(minutesToMillis(minutes));
+  };
 
   const countDown = () => {
     setMillis((time) => {
@@ -25,6 +27,21 @@ export const Countdown = ({ minutes = 0.1, isPaused, onProgress, onEnd }) => {
       const timeLeft = time - 1000;
       return timeLeft;
     });
+  };
+
+  const sound = new Audio.Sound();
+
+  const playSound = async () => {
+    try {
+      // Load the sound file
+      await sound.loadAsync(require("../audio/complete.mp3")); // Hard-coded sound file
+      await sound.playAsync();
+      setTimeout(() => {
+        sound.stopAsync();
+      }, 3000);
+    } catch (error) {
+      console.log("Error playing sound:", error);
+    }
   };
 
   useEffect(() => {
@@ -58,9 +75,9 @@ export const Countdown = ({ minutes = 0.1, isPaused, onProgress, onEnd }) => {
 const styles = StyleSheet.create({
   text: {
     fontSize: fontSize.xxxl,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: colors.white,
     padding: spacing.lg,
-    backgroundColor: '#121212',
+    backgroundColor: "#121212",
   },
 });
