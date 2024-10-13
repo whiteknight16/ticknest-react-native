@@ -12,7 +12,7 @@ export default function Timer({ focusItem, onTimerEnd, clearSubject }) {
 
   const [isStarted, setIsStared] = useState(false);
   const [progress, setProgress] = useState(1);
-  const [minutes, setMinutes] = useState(0.05);
+  const [minutes, setMinutes] = useState(10);
 
   const ONE_SECOND_IN_MS = 1000;
 
